@@ -12,7 +12,9 @@ const totalData = fetch("./data.json")
   })
   .then((data) => {
     filterData = data;
+    console.log(filterData)
   });
+
 
 techBtn.forEach((btn) => {
   btn.addEventListener("click", async function (event) {
