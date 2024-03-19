@@ -1,14 +1,17 @@
 import Cards from "./Cards";
 import fData from "../data.json";
 import Filter from "./Filter";
+import { useState } from "react";
 
 function App() {
+
+  const [filterbtn, setFilterbtn] = useState([]);
 
   return (
     <>
       <main>
-        <Filter />
-        <Cards />
+        <Filter filterbtn={filterbtn} setFilterbtn={setFilterbtn} />
+        <Cards filterbtn={filterbtn} setFilterbtn={setFilterbtn} />
       </main>
       <footer>
       <p className="attribution">

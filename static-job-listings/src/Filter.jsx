@@ -1,9 +1,17 @@
 import React from "react";
 
-const Filter = () => {
+const Filter = ({ filterbtn, setFilterbtn }) => {
+  
+  
   return (
-    <div className="filter__div not__show">
-      <div className="filters"></div>
+    <div className="filter__div">
+      <div className="filters">
+        {filterbtn.map((item) => (
+          <button key={item} className="filter">
+            {item}
+          </button>
+        ))}
+      </div>
       <button className="clear">Clear</button>
     </div>
   );

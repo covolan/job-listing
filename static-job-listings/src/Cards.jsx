@@ -1,68 +1,96 @@
-import React from "react";
+import React, { useState } from "react";
 import Data from "../data.json";
 import "./style.css";
 
-const Cards = () => {
-  const clickfunc = (e) => {
-    const filters = document.querySelector(".filters");
-    const eventButton = document.createElement("button");
-    const card = document.querySelectorAll(".card");
-    const filterDiv = document.querySelector(".filter__div");
-    const clearBtn = document.querySelector(".clear");
+const Cards = ({filterbtn, setFilterbtn}) => {
+  // const clickfunc = (e) => {
+  //   const filters = document.querySelector(".filters");
+  //   const eventButton = document.createElement("button");
+  //   const card = document.querySelectorAll(".card");
+  //   const filterDiv = document.querySelector(".filter__div");
 
-    eventButton.innerText = e.currentTarget.innerText;
-    eventButton.classList.add("filter");
-    eventButton.id = e.currentTarget.innerText;
-    const filtersTracker = [];
+  //   eventButton.innerText = e.currentTarget.innerText;
+  //   eventButton.classList.add("filter");
 
-    let res = [];
+  //   const filtersTracker = [];
 
-    Data.forEach((data) => {
-      if (
-        data[e.currentTarget.classList[1]].includes(e.currentTarget.innerText)
-      ) {
-        res.push(data.id);
-      }
-    });
+  //   eventButton.id = e.currentTarget.innerText;
 
-    card.forEach((c) => {
-      if (!res.includes(parseInt(c.id))) {
-        c.classList.add("hidden");
-      }
-    });
+  //   let res = [];
 
-    if (!filtersTracker.includes(eventButton.id)) {
-      filters.append(eventButton);
-      filterDiv.classList.remove("not__show");
-      filtersTracker.push(eventButton.id);
-      eventButton.addEventListener("click", (event) => {
-        let perRes = res.slice(0, res.length);
-        card.forEach((c) => {
-          if (!perRes.includes(parseInt(c.id))) {
-            c.classList.remove("hidden");
-          }
-        });
-        filtersTracker.splice(filtersTracker.indexOf(event.target.id), 1);
-        if (filtersTracker.length == 0) {
-          filterDiv.classList.add("not__show");
-        }
-        eventButton.remove();
+  //   Data.forEach((data) => {
+  //     if (
+  //       data[e.currentTarget.classList[1]].includes(e.currentTarget.innerText)
+  //     ) {
+  //       res.push(data.id);
+  //     }
+  //   });
+
+  //   card.forEach((c) => {
+  //     if (!res.includes(parseInt(c.id))) {
+  //       c.classList.add("hidden");
+  //     }
+  //   });
+
+  //   if (!filtersTracker.includes(eventButton.id)) {
+  //     filters.append(eventButton);
+  //     filterDiv.classList.remove("not__show");
+  //     filtersTracker.push(eventButton.id);
+  //     eventButton.addEventListener("click", (event) => {
+  //       let perRes = res.slice(0, res.length);
+  //       card.forEach((c) => {
+  //         if (!perRes.includes(parseInt(c.id))) {
+  //           c.classList.remove("hidden");
+  //         }
+  //       });
+  //       filtersTracker.splice(filtersTracker.indexOf(event.target.id), 1);
+  //       if (filtersTracker.length == 0) {
+  //         filterDiv.classList.add("not__show");
+  //       }
+  //       eventButton.remove();
+  //     });
+  //   }
+
+  //   const clearBtn = document.querySelector(".clear");
+
+  //   clearBtn.addEventListener("click", (event) => {
+  //     card.forEach((c) => {
+  //       c.classList.remove("hidden");
+  //     });
+  //     filterDiv.classList.add("not__show");
+  //     filtersTracker.length = 0;
+  //     filters.innerHTML = "";
+  //   });
+
+  // };
+
+  const [cards, setCards] = useState(Data);
+
+  const handleClick = (filter, filterName) => {
+    let tmpCardList;
+    
+    if (filterName == "languages" || filterName == "tools") {
+      tmpCardList = cards.filter((elem) => {
+        return elem[filterName].includes(filter);
+      })
+    } else {
+      tmpCardList = cards.filter((elem) => {
+        return elem[filterName] == filter;
       });
     }
+    setCards(tmpCardList);
 
-    clearBtn.addEventListener("click", (event) => {
-      card.forEach((c) => {
-        c.classList.remove("hidden");
-      });
-      filterDiv.classList.add("not__show");
-      filtersTracker.length = 0;
-      filters.innerHTML = "";
-    });
+    if (!filterbtn.includes(filter)) {
+      setFilterbtn([...filterbtn, filter]);
+    }
+    
   };
+
+
 
   return (
     <>
-      {Data.map((job) => (
+      {cards.map((job) => (
         <div className="card" id={job.id} key={job.id}>
           <img className="logo" src={job.logo} alt={job.company + "Logo"} />
           <div className="card__info">
@@ -82,25 +110,22 @@ const Cards = () => {
             </div>
           </div>
           <div className="card__tech">
-            <button onClick={(e) => clickfunc(e)} className="tech level">
+            <button
+              onClick={() => handleClick(job.level, "level")}
+              className="tech level"
+            >
               {job.level}
             </button>
             {job.languages.map((lang) => (
               <button
-                onClick={(e) => clickfunc(e)}
-                key={lang}
-                className="tech languages"
-              >
+              onClick={() => handleClick(lang, "languages")}
+               key={lang} className="tech languages">
                 {lang}
               </button>
             ))}
             {job.tools
               ? job.tools.map((tool) => (
-                  <button
-                    onClick={(e) => clickfunc(e)}
-                    key={tool}
-                    className="tech tools"
-                  >
+                  <button key={tool} className="tech tools">
                     {tool}
                   </button>
                 ))

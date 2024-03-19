@@ -57,7 +57,7 @@ techBtn.forEach((btn) => {
     }
   });
 });
-
+ 
 clearBtn.addEventListener("click", (event) => {
   card.forEach((c) => {
     c.classList.remove("hidden");
