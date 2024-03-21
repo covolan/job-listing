@@ -8,6 +8,7 @@ const Filter = ({ filterbtn, setFilterbtn, cards, setCards, dataValue }) => {
   return (
     <div className="filter__div">
       <div className="filters">
+        {/* Filter buttons display */}
         {filterbtn.map((elem) => (
           <button key={elem.filter} className="filter">
             {elem.filter}
