@@ -1,52 +1,81 @@
 import "./style.css";
 
-const Cards = ({ filterbtn, setFilterbtn, cards, setCards }) => {
-
+const Cards = ({ filters, setFilters }) => {
   const handleClick = (filter, filterName) => {
-    let tmpCardList; // Temporary list to storage the cards.
+    let tmpCardList;
+    let tmpFilteredCardsList;
+    let tmpCurrentFilters;
+    let alreadyPressed = false;
 
-    // Check if the clicked button belong to lang. tools or position.
-    if (filterName == "languages" || filterName == "tools") {
-      // filter the cards to display.
-      tmpCardList = cards.filter((elem) => {
-        return elem[filterName].includes(filter);
-      });
-    } else {
-      // filter the cards to display.
-      tmpCardList = cards.filter((elem) => {
-        return elem[filterName] == filter;
+    if (filters.currentFilters.length != 0) {
+      filters.currentFilters.map((elem) => {
+        if (elem.filter == filter) {
+          alreadyPressed = true;
+          return;
+        }
       });
     }
 
-    // Set the cards to be displayed based on the button pressed.
-    setCards(tmpCardList);
+    if (!alreadyPressed) {
+      if (filterName == "languages" || filterName == "tools") {
+        tmpCardList = filters.displayedCards.filter((elem) => {
+          return elem[filterName].includes(filter);
+        });
+        tmpFilteredCardsList = filters.displayedCards.filter((elem) => {
+          return !elem[filterName].includes(filter);
+        });
+      } else {
+        tmpCardList = filters.displayedCards.filter((elem) => {
+          return elem[filterName] == filter;
+        });
+        tmpFilteredCardsList = filters.displayedCards.filter((elem) => {
+          return elem[filterName] != filter;
+        });
+      }
 
-    // Logic to create the button on the top filter div.
-    if (filterbtn.length == 0) {
-      // if it doesn't have any button, create the first.
-      setFilterbtn([...filterbtn, { filter: filter, filterName: filterName }]);
-    } else {
-      // Check if the button is already on the container.
-      let alreadyAdded = false;
-      filterbtn.map((elem) => {
-        if (elem.filter == filter) {
-          alreadyAdded = true;
+      if (filters.currentFilters.length == 0) {
+        tmpCurrentFilters = [{ filter: filter, filterName: filterName }];
+      } else {
+        let alreadyAdded = false;
+        filters.currentFilters.map((elem) => {
+          if (elem.filter == filter) {
+            alreadyAdded = true;
+          }
+        });
+        if (!alreadyAdded) {
+          tmpCurrentFilters = [
+            ...filters.currentFilters,
+            { filter: filter, filterName: filterName },
+          ];
         }
-      });
-      // If the button has not been added, then add it to the container.
-      if (!alreadyAdded) {
-        setFilterbtn([
-          ...filterbtn,
-          { filter: filter, filterName: filterName },
-        ]);
+      }
+
+      tmpFilteredCardsList = [
+        ...filters.occultedCards,
+        ...tmpFilteredCardsList,
+      ];
+
+      if (tmpCurrentFilters) {
+        setFilters({
+          ...filters,
+          displayedCards: tmpCardList,
+          occultedCards: tmpFilteredCardsList,
+          currentFilters: tmpCurrentFilters,
+        });
+      } else {
+        setFilters({
+          ...filters,
+          displayedCards: tmpCardList,
+          occultedCards: tmpFilteredCardsList,
+        });
       }
     }
   };
 
   return (
     <>
-    {/* Card format */}
-      {cards.map((job) => (
+      {/* Card format */}
+      {filters.displayedCards.map((job) => (
         <div className="card" id={job.id} key={job.id}>
           <img className="logo" src={job.logo} alt={job.company + "Logo"} />
           <div className="card__info">
@@ -83,7 +112,11 @@ const Cards = ({ filterbtn, setFilterbtn, cards, setCards }) => {
             ))}
             {job.tools
               ? job.tools.map((tool) => (
-                  <button key={tool} className="tech tools">
+                  <button
+                    key={tool}
+                    onClick={() => handleClick(tool, "tools")}
+                    className="tech tools"
+                  >
                     {tool}
                   </button>
                 ))
