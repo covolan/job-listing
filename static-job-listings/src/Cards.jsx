@@ -1,75 +1,10 @@
 import "./style.css";
 
-const Cards = ({ filters, setFilters }) => {
+const Cards = ({ filters, updateState, filterCards }) => {
   const handleClick = (filter, filterName) => {
-    let tmpCardList;
-    let tmpFilteredCardsList;
-    let tmpCurrentFilters;
-    let alreadyPressed = false;
-
-    if (filters.currentFilters.length != 0) {
-      filters.currentFilters.map((elem) => {
-        if (elem.filter == filter) {
-          alreadyPressed = true;
-          return;
-        }
-      });
-    }
-
-    if (!alreadyPressed) {
-      if (filterName == "languages" || filterName == "tools") {
-        tmpCardList = filters.displayedCards.filter((elem) => {
-          return elem[filterName].includes(filter);
-        });
-        tmpFilteredCardsList = filters.displayedCards.filter((elem) => {
-          return !elem[filterName].includes(filter);
-        });
-      } else {
-        tmpCardList = filters.displayedCards.filter((elem) => {
-          return elem[filterName] == filter;
-        });
-        tmpFilteredCardsList = filters.displayedCards.filter((elem) => {
-          return elem[filterName] != filter;
-        });
-      }
-
-      if (filters.currentFilters.length == 0) {
-        tmpCurrentFilters = [{ filter: filter, filterName: filterName }];
-      } else {
-        let alreadyAdded = false;
-        filters.currentFilters.map((elem) => {
-          if (elem.filter == filter) {
-            alreadyAdded = true;
-          }
-        });
-        if (!alreadyAdded) {
-          tmpCurrentFilters = [
-            ...filters.currentFilters,
-            { filter: filter, filterName: filterName },
-          ];
-        }
-      }
-
-      tmpFilteredCardsList = [
-        ...filters.occultedCards,
-        ...tmpFilteredCardsList,
-      ];
-
-      if (tmpCurrentFilters) {
-        setFilters({
-          ...filters,
-          displayedCards: tmpCardList,
-          occultedCards: tmpFilteredCardsList,
-          currentFilters: tmpCurrentFilters,
-        });
-      } else {
-        setFilters({
-          ...filters,
-          displayedCards: tmpCardList,
-          occultedCards: tmpFilteredCardsList,
-        });
-      }
-    }
+    let tmpVal = filterCards(filters, filter, filterName);
+    console.log(tmpVal);
+    updateState(tmpVal[0], tmpVal[1], tmpVal[2]);
   };
 
   return (
