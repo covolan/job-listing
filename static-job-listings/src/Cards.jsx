@@ -2,9 +2,9 @@ import "./style.css";
 
 const Cards = ({ filters, updateState, filterCards }) => {
   const handleClick = (filter, filterName) => {
-    let tmpVal = filterCards(filters, filter, filterName);
-    console.log(tmpVal);
-    updateState(tmpVal[0], tmpVal[1], tmpVal[2]);
+    let tmpState = filterCards(filters, filter, filterName);
+    console.log(tmpState);
+    updateState(tmpState[0], tmpState[1], tmpState[2]);
   };
 
   return (

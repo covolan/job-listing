@@ -1,13 +1,12 @@
 import React from "react";
 
 const Filter = ({ filters, filterCards, updateState, Data }) => {
-  const removeFilter = (filter, filterName) => {
+  const removeFilter = (filter) => {
     let tmpCurrentFilters = filters.currentFilters.filter(
       (elem) => elem.filter != filter
     );
     let tmpCardList = Data;
     let tmpFilteredCardsList = [];
-    console.log(tmpCardList);
     let tmpState = {
       currentFilters: [],
       displayedCards: tmpCardList,
@@ -24,7 +23,6 @@ const Filter = ({ filters, filterCards, updateState, Data }) => {
         };
       });
     }
-    console.log(tmpState);
     updateState(
       tmpCurrentFilters,
       tmpState.displayedCards,
@@ -32,10 +30,26 @@ const Filter = ({ filters, filterCards, updateState, Data }) => {
     );
   };
 
+  const clearFilter = () => {
+    let tmpCardList = Data;
+    let tmpFilteredCardsList = [];
+    let tmpState = {
+      currentFilters: [],
+      displayedCards: tmpCardList,
+      occultedCards: tmpFilteredCardsList,
+    };
+    updateState(
+      tmpState.currentFilters,
+      tmpState.displayedCards,
+      tmpState.occultedCards
+    );
+  };
+
   return (
-    <div className="filter__div">
+    <div className={
+      "filter__div " + (filters.currentFilters.length == 0 ? "not__show" : "")
+    }>
       <div className="filters">
-        {/* {console.log(filters, filters.currentFilters)} */}
         {filters.currentFilters.map((elem) => {
           return (
             <button
@@ -48,8 +62,12 @@ const Filter = ({ filters, filterCards, updateState, Data }) => {
           );
         })}
       </div>
-      {/* {console.log(filters)} */}
-      <button className="clear">Clear</button>
+      <button
+        onClick={() => clearFilter()}
+        className="clear"
+      >
+        Clear
+      </button>
     </div>
   );
 };
