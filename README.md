@@ -1,8 +1,8 @@
 # Static Job Listing
 
 - Linguagens / Languages:
-  - [:brazil:](#introdução)
-  - [:us:](#introduction)
+  - [:brazil:](#introdução) Português.
+  - [:us:](#introduction) English.
 
 ![image](/assets/images/mobile-desktop-image.png)
 
