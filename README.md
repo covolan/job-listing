@@ -1,10 +1,11 @@
 # Static Job Listing
 
+![image](https://i.imgur.com/NW8ESfF.png)
+
 - Linguagens / Languages:
   - [:brazil:](#introdução) Português.
   - [:us:](#introduction) English.
 
-![image](/assets/images/mobile-desktop-image.png)
 
 ## Introdução
 
